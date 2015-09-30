@@ -46,17 +46,32 @@ struct String {
     int compare(String &str) {
         return strcmp(this->str_, str.str_);
     }
+    
+    void append(String &str) {        
+        int newSize = size_ + str.size_;
+        char * newString = new char[newSize + 1];
+        
+        strcpy(newString, str_);
+        strcpy(newString + size_, str.str_);
+        
+        delete [] str_;
+        size_ = newSize;
+        str_ = newString;
+    }
 };
 
 main() {
-	char a[] = "Hello!";
-	char b[] = "World";
+	char a[] = "Hello,";
+	char b[] = " World!";
 	String s(a);
 	String s1(b);
 	cout << s.size() << endl;
 	cout << s.at(1) << endl;
 	cout << s.c_str() << endl;
 	cout << s.compare(s1) << endl;
+	s.append(s1);
+	cout << s.c_str() << endl;
+	cout << s.size() << endl;
 }
 
 
