@@ -4,57 +4,14 @@
 
 using namespace std;
 
-
-
-/*struct Prefix : String {
-    
-    Prefix(const char *str_ = "") {
-	    int len = strlen(str_);
-	    //We can omit pointer to this here
-	    size = len;
-	    str = new char[len];
-	    strcpy(this->str, str_);
-	}
-    
-    Prefix operator[](size_t end) const {
-        
-        size_t suffix_size = size - end;
-        cout << suffix_size << '\n';
-        char * substr = new char[suffix_size];
-        for (size_t i = 0; i < suffix_size; ++i) {
-            substr[i] = str[i];
-        }
-        
-        return Prefix(substr);
-    }
-    
-    size_t size;
-	char *str;
-
-};*/
-/*struct String {
-	String(const char *str = "");
-	String(size_t n, char c);
-	~String();
-
-	void append(const String &other);
-	const char *c_str();
-	
-	Prefix operator[](size_t start);
-
-	size_t size;
-	char *str;
-};*/
-
-
-
 struct String {
-	
-	String(const char *str_ = "") {
+
+    String(const char *str_ = "") {
 	    int len = strlen(str_);
+	    cout << "str len: " << len << '\n';
 	    //We can omit pointer to this here
-	    size = len;
-	    str = new char[len];
+	    size = len + 1;
+	    str = new char[size];
 	    strcpy(this->str, str_);
 	}
 	
@@ -70,7 +27,7 @@ struct String {
 	    delete [] str;
 	}
 	
-    const char *c_str() {
+	const char *c_str() {
         return str;
     }
 
@@ -86,40 +43,55 @@ struct String {
         str = newString;
     }
 
-	size_t size;
-	char *str;
-	
-	/**
-	    Get substring of specified string.
+    struct Substring {
+        
+        Substring(const char *str_ = "", size_t start = 0) {	        
+	        int len = strlen(str_);
+	        size = len + 1;
+	        str = new char[size];
+	        strcpy(this->str, str_);
+	        start_ = start;
+	    }
 	    
-	    start - zero-based substring start
-	    end - zero-based substring end (exclusive) 
-	*/
-	String operator[](size_t start) const {
+	    ~Substring() {
+	        delete [] str;
+	    }
+        
+        String operator[](size_t end) const {
+            size_t suffix_size = end - start_;
+            char substr[suffix_size + 1];
+            for (size_t i = 0; i < suffix_size; ++i) {
+                substr[i] = str[i];
+            }
+            substr[suffix_size] = '\0';
+            return String(substr);
+        }
+        
+        size_t size;
+	    char *str;
+	    size_t start_;
+    };
+    
+    Substring operator[](size_t start) const {
         size_t suffix_size = size - start;
-        cout << suffix_size << '\n';
-	    char * substr = new char[suffix_size];
+	    char substr[suffix_size];
 	    for (size_t i = 0; i < suffix_size; ++i) {
 	        substr[i] = str[start + i];
 	    }
 	    
-	    String prefix = String(substr);
-	    
-	    return prefix;
-	}
+	    return Substring(substr, start);
+    }
+
+    size_t size;
+	char *str;
+
 };
 
-
-
-//};
-
- 
 int main() {
-    char a[] = "abcdefg";
+    char a[] = "hello";
     String s(a);
-    cout << s.c_str() << '\n';
-    size_t start = 2;
-    String ss = s[4][5];
-    cout << ss.c_str() << '\n';
-    
+    String::Substring ss = s[1];
+    String s1 = s[1][4];
+    cout << s1.c_str() << '\n';
+    return 0;
 }
