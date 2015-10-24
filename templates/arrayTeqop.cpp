@@ -77,6 +77,7 @@ private:
     T * values_;
 };
 
+// Structure for testing
 struct Test {
     Test(int value) {
         cout << "Creating object with value " << value << '\n';
@@ -103,7 +104,8 @@ private:
 };
 
 int main() {
-    /*cout << "Testing with int\n";
+    
+    cout << "Testing with int\n";
     
     Array<int> a(10, 1);
     int value = a[1];
@@ -119,8 +121,7 @@ int main() {
     Array<int> cc = Array<int>(c);
     Array<int> * aa = new Array<int>(10, 2);
     value = (*aa)[1];
-    cout << value << '\n';*/
-    
+    cout << value << '\n';
     
     Test t(1);
     cout << "Testing with Test object. Object size: " << sizeof(Test) << "\n";
