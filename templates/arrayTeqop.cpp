@@ -8,29 +8,25 @@ class Array
 {
 public:
     explicit Array(size_t size = 0, const T& value = T()) {
-        cout << "T size: " << sizeof(T) << '\n';
         
         size_ = size;
         mem_ = new char[size_ * sizeof(T)];
         values_ = (T*) mem_;
         
         for (size_t i = 0; i < size; ++i) {
-            //char * addr = mem_ + (i * sizeof(T));
-            //cout << "Addr: " << addr << '\n';
             T * tmp = new (mem_ + i * sizeof(T)) T(value);
-            //cout << "Creating object on " << values_ + i * sizeof(T) << " " << tmp << '\n';
         }
         
         for (int i = 0; i < size_; ++i) {
             T * tmp = (T*) (mem_ + i * sizeof(T));
-            //cout << tmp->value() << '\n';
         }
         
     }
 
     Array(Array const & other) {
         size_ = other.size_;
-        values_ = (T*) new char[size_ * sizeof(T)];
+        mem_ = new char[size_ * sizeof(T)];
+        values_ = (T*) mem_;
         
         for (int i = 0; i < size_; ++i) {
             T * tmp = new (mem_ + i * sizeof(T)) T(other.values_[i]);
@@ -38,13 +34,11 @@ public:
     }
 
     ~Array() {
-        cout << "Calling Array object destructor. Array size: " << size_ << '\n';
         for (int i = 0; i < size_; ++i) {
             T * object = (T*) (mem_ + i * sizeof(T));
             object->~T();
             
         }
-        
         //Free memory
         delete [] mem_;
         mem_ = 0;
@@ -55,7 +49,9 @@ public:
         if (this != &other) {
             delete [] mem_;
             size_ = other.size_;
-            values_ = (T*) new char[size_ * sizeof(T)];
+            mem_ = new char[size_ * sizeof(T)];
+            values_ = (T*) mem_;
+            
             for (int i = 0; i < size_; ++i) {
                 T * tmp = new (mem_ + i * sizeof(T)) T(other.values_[i]);
             }
@@ -131,11 +127,11 @@ int main() {
     
     Array<Test> at(6, t);
     
-    /*cout << "Copy array\n";
+    cout << "Copy array\n";
     
     Array<Test> at1 = at;
     
-    at1 = at1;*/
+    at1 = at1;
 
     
     return 0;
