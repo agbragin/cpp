@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -12,24 +13,15 @@ struct ICloneable
 template <typename T>
 struct ValueHolder : ICloneable {
 
-    explicit ValueHolder(const T& data) {
-        data_ = &data;
-        //cout << "Data address: " << data_ << '\n';
-    }
+    explicit ValueHolder(const T& data) : data_(data) {}
     
-    ~ValueHolder() {
-        //cout << "Deleting data on " << data_ << '\n';
-        delete data_;
-    }
+    ~ValueHolder() {}
     
     ValueHolder* clone() const {
-        //cout << "Cloning data on " << data_ << '\n';
-        T& dataCopy = * new T(*data_);
-        ValueHolder * clone = new ValueHolder(dataCopy);
-        return clone;
+        return new ValueHolder(data_);
     }
 
-    T const * data_;
+    T data_;
 };
 
 struct Test {
@@ -57,10 +49,17 @@ private:
 };
 
 int main() {
-    Test &t = *new Test(1);
-    //Test t1 = t;
-    ValueHolder<Test> * vh = new ValueHolder<Test>(t);
-    ValueHolder<Test> * vh1 = vh->clone();
-    delete vh;
-    delete vh1;
+    int const v = 10;
+    int const * pv = &v;
+    ValueHolder<int> vh(v);
+    cout << vh.data_ << '\n';
+    ValueHolder<int> * clone = vh.clone();
+    cout << (*clone).data_ << '\n';
+    
+    Test t(1);
+    Test t1 = t;
+    ValueHolder<Test> vh1(t);
+    cout << vh1.data_.value() << '\n';
+    ValueHolder<Test> * vh2 = vh1.clone();
+    cout << vh2->data_.value() << '\n';
 }
