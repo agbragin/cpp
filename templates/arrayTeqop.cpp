@@ -3,6 +3,8 @@
 
 using namespace std;
 
+// Copy constructor for T is private
+
 template <typename T>
 class Array
 {

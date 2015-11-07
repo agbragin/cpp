@@ -1,6 +1,5 @@
 #include <cstddef>
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
@@ -48,6 +47,7 @@ private:
     int value_;
 };
 
+/*
 int main() {
     int const v = 10;
     int const * pv = &v;
@@ -63,3 +63,4 @@ int main() {
     ValueHolder<Test> * vh2 = vh1.clone();
     cout << vh2->data_.value() << '\n';
 }
+*/
